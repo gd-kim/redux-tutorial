@@ -1,4 +1,4 @@
-export const userReducer = (state='', action) =>{
+export const userReducer = (state='Tom', action) =>{
   if(action.type === 'updateUser'){
     return action.payload;
   }
