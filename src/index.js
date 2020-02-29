@@ -3,33 +3,38 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {createStore} from 'redux';
+import {combineReducers, createStore} from 'redux';
 
-const reducer = (state, action) =>{
-  console.log("action : ",action);
+// es6 디폴트 파라메터 : 파라메터가 undefined 일때 초기화
+const productReducer = (state=[], action)=>{
+  return state;
 
-  if(action.type === 'changeState'){
-    return action.payload.newState;
-  }
-  return 'State';
 }
 
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-console.log(store);
-console.log(store.getState());
+const userReducer = (state='', action) =>{
+  if(action.type === 'updateUser'){
+    return action.payload;
+  }
+  return state;
+}
 
-//1. 가입
-store.subscribe(()=> console.log(store.getState()));
+// 입력 파라메터에 JSON 객체가 들어가고, 이 객체가 state를 구성한다.
+const allReducers = combineReducers({
+  product : productReducer,
+  user : userReducer
+});
 
-//2. 액션 디스패치 (publish)
+
+
 const action = {
-  type: 'changeState',
-  payload : {
-    newState : 'New State'
-  }
-}
-store.dispatch(action);
+  type : 'updateUser',
+  payload : 'Tom'
 
+}
+
+const store = createStore(allReducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
+store.dispatch(action);
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
